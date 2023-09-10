@@ -16,7 +16,7 @@ class Topics {
 
         foreach($topics as $key => &$topic) {
             $topics[$key]['user'] = $this->users->getUser($topics[$key]['user_id'])[0]['name'];
-            $topics[$key]['count_messages'] = count($this->messages->getMessages($topics[$key]['id']));
+            $topics[$key]['count_messages'] = count($this->messages->getTopicMessages($topics[$key]['id']));
             unset($topics[$key]['user_id']);
         }
 
@@ -24,8 +24,10 @@ class Topics {
     }
 
     public function getTopic($id) {
-        $topic = $this->db->select('SELECT * from `topics` WHERE `id`=' . $id);
-        
+        $topic = $this->db->select('SELECT * from `topics` WHERE `id`=' . $id)[0];
+        $topic['user'] = $this->users->getUser($topic['user_id'])[0]['name'];
+        $topic['user_count_messages'] = count($this->messages->getUserMessages($topic['user_id']));
+
         return $topic;
     }
 }

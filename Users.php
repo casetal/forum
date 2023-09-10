@@ -5,6 +5,8 @@
 class Users {
     private $db;
 
+    private $messages;
+
     public function __construct() {
         $this->db = new Dbconnect();
     }
@@ -15,8 +17,8 @@ class Users {
         return $topics;
     }
 
-    public function getUser($id) {
-        $topic = $this->db->select('SELECT * from `users` WHERE `id`=' . $id);
+    public function getUser($user_id) {
+        $topic = $this->db->select('SELECT * from `users` WHERE `id`=' . $user_id);
 
         return $topic;
     }
