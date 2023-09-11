@@ -1,7 +1,5 @@
 <?php
 
-// include('Db.php');
-
 class Users {
     private $db;
 
@@ -12,14 +10,26 @@ class Users {
     }
 
     public function getUsers() {
-        $topics = $this->db->select('SELECT * from `users` ORDER BY `id` DESC');
+        $users = $this->db->select('SELECT * from `users` ORDER BY `id` DESC');
 
-        return $topics;
+        return $users;
     }
 
     public function getUser($user_id) {
-        $topic = $this->db->select('SELECT * from `users` WHERE `id`=' . $user_id);
+        $user = $this->db->select('SELECT * from `users` WHERE `id`=' . $user_id);
 
-        return $topic;
+        return $user;
+    }
+
+    public function createUser($name) {
+        $searchUser = $this->db->select('SELECT * from `users` WHERE LOWER(`name`)="' . strtolower($name) . '"');
+
+        if(count($searchUser) == 0) {
+            $user = $this->db->Insert('INSERT INTO `users` (`name`) VALUES ("' . $name . '")');
+
+            return $user;
+        } else {
+            return ['error' => 'Такой пользователь уже есть'];
+        }
     }
 }

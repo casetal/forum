@@ -60,7 +60,7 @@ if (isset($_GET['topic'])) {
                     <div class="caption card-footer">
                         <ul class="list-inline">
                             <li><i>Дата создания темы:
-                                    <?= $topic['date'] ?>
+                                    <?= $topic['created_at'] ?>
                                 </i></li>
                         </ul>
                     </div>
@@ -89,7 +89,7 @@ if (isset($_GET['topic'])) {
                         <div class="caption card-footer">
                             <ul class="list-inline">
                                 <li><i>Дата сообщения:
-                                        <?= $message['date'] ?>
+                                        <?= $message['created_at'] ?>
                                     </i></li>
                             </ul>
                         </div>

@@ -40,4 +40,14 @@ class Dbconnect {
             throw New Exception($e->getMessage());
         }
     }
+
+    public function Insert($query) {
+        try {
+            $query_result = $this->connection->query($query);
+
+            return $query_result;
+        } catch(Exception $e) {
+            throw New Exception($e->getMessage());
+        }
+    }
 }
