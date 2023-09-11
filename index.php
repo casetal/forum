@@ -141,7 +141,7 @@ if (isset($_GET['topic'])) {
             <?php
                 if($pages > 1) {
                     for($p = 1; $p <= $pages; $p++) {  
-                        echo '<a href = "?page=' . $p . '">' . $p . ' </a>';  
+                        echo '<a href = "?topic=' + $_GET['topic'] + '&page=' . $p . '">' . $p . ' </a>';  
                     }
                 }
             ?>
