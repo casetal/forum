@@ -43,9 +43,9 @@ class Dbconnect {
 
     public function Insert($query) {
         try {
-            $query_result = $this->connection->query($query);
+            $this->connection->query($query);
 
-            return $query_result;
+            return $this->connection->insert_id;
         } catch(Exception $e) {
             throw New Exception($e->getMessage());
         }

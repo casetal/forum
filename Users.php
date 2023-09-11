@@ -25,11 +25,10 @@ class Users {
         $searchUser = $this->db->select('SELECT * from `users` WHERE LOWER(`name`)="' . strtolower($name) . '"');
 
         if(count($searchUser) == 0) {
-            $user = $this->db->Insert('INSERT INTO `users` (`name`) VALUES ("' . $name . '")');
-
-            return $user;
+            $user_id = $this->db->Insert('INSERT INTO `users` (`name`) VALUES ("' . $name . '")');
+            return $user_id;
         } else {
-            return ['error' => 'Такой пользователь уже есть'];
+            return $searchUser[0]['id'];
         }
     }
 }

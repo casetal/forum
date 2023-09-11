@@ -7,6 +7,7 @@ include('Messages.php');
 
 $t = new Topics();
 $m = new Messages();
+$u = new Users();
 
 $topic = null;
 $topics = [];
@@ -15,6 +16,31 @@ $messages = [];
 if (isset($_GET['topic'])) {
     $topic = $t->getTopic($_GET['topic']);
     $messages = $m->getTopicMessages($_GET['topic']);
+    
+    if(isset($_POST['username']) && isset($_POST['message'])) {
+        $username = $_POST['username'];
+        $message = $_POST['message'];
+
+        $user_id = $u->createUser($username);
+
+        $m->createMessage($_GET['topic'], $user_id, $message);
+
+        header("Refresh:0");
+    }
+} else if(isset($_GET['form'])) {
+    if($_GET['form'] == "createTopic") {
+        if(isset($_POST['username']) && isset($_POST['title']) && isset($_POST['description'])) {
+            $username = $_POST['username'];
+            $title = $_POST['title'];
+            $description = $_POST['description'];
+
+            $user_id = $u->createUser($username);
+
+            $topic_id = $t->createTopic($user_id, $title, $description);
+
+            header("Location: ?topic=" . $topic_id);
+        }
+    }
 } else {
     $topics = $t->getTopics();
 }
@@ -29,6 +55,11 @@ if (isset($_GET['topic'])) {
     <title>Форум для Урал-Софт</title>
 
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <style>
+        .input-group {
+            margin: 15px 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -96,10 +127,48 @@ if (isset($_GET['topic'])) {
                     </div>
                 </div>
             <?php } ?>
+            <div class="messageForm">
+                <h3>Ответить</h3>
+                <form method="POST">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon">Имя пользователя:</span>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon">Сообщение:</span>
+                        <textarea name="message" class="form-control" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Создать</button>
+                </form>
+            </div>
+            <?php } else if(isset($_GET['form'])) { ?>
 
+                <?php if($_GET['form'] == "createTopic") { ?>
+                    <h1>Создание темы</h1>
+                    <form method="POST">
+                    <div class="input-group input-group-sm">
+                            <span class="input-group-addon">Имя пользователя:</span>
+                            <input type="text" name="username" class="form-control" required>
+                        </div>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">Имя темы:</span>
+                            <input type="text" name="title" class="form-control" required>
+                        </div>
+
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">Сообщение:</span>
+                            <textarea name="description" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Создать</button>
+                    </form>
+
+                <?php } ?>
         <?php } else { ?>
 
             <h1>Форум Урал-Софт</h1>
+            <div class="buttons">
+                <a href="?form=createTopic" class="btn btn-info" role="button">Создать тему</a>
+            </div>
             <ul class="list-group">
                 <?php foreach ($topics as $topic) { ?>
                     <a href="?topic=<?= $topic['id'] ?>" class="list-group-item">

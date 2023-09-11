@@ -25,4 +25,9 @@ class Messages {
         $messages = $this->db->select('SELECT * from `messages` WHERE `user_id`='.$user_ud);
         return $messages;
     }
+
+    public function createMessage($topic_id, $user_id, $message) {
+        $message = $this->db->Insert('INSERT INTO `messages` (`message`, `topic_id`, `user_id`) VALUES ("' . $message . '", "' . $topic_id . '", "' . $user_id . '")');
+        return $message;
+    }
 }

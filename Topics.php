@@ -30,4 +30,9 @@ class Topics {
 
         return $topic;
     }
+
+    public function createTopic($user_id, $name, $description) {
+        $topic = $this->db->Insert('INSERT INTO `topics` (`name`, `description`, `user_id`) VALUES ("' . $name . '", "' . $description . '", "' . $user_id . '")');
+        return $topic;
+    }
 }
