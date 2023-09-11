@@ -9,15 +9,26 @@ class Messages {
         $this->users = new Users();
     }
 
-    public function getTopicMessages($topic_id) {
+    public function getTopicMessages($topic_id, $page = 0, $results_per_page = 10) {
         $topic_id = $this->db->connection->real_escape_string($topic_id);
 
-        $messages = $this->db->select('SELECT * from `messages` WHERE `topic_id`='.$topic_id);
+        $query = 'SELECT * from `messages` WHERE `topic_id`='.$topic_id;
+        $messages = $this->db->select($query);
 
-        foreach($messages as $key => &$message) {
-            $messages[$key]['user'] = $this->users->getUser($messages[$key]['user_id'])[0]['name'];
-            $messages[$key]['user_count_messages'] = count($this->getUserMessages($messages[$key]['user_id']));
-            unset($messages[$key]['user_id']);
+        if($page != 0) {
+            $page_first_result = ($page-1) * $results_per_page;  
+            $number_of_result = count($messages);
+            $pages = ceil ($number_of_result / $results_per_page);  
+
+            $messages = $this->db->select($query . ' LIMIT ' . $page_first_result . ',' . $results_per_page);
+
+            foreach($messages as $key => &$message) {
+                $messages[$key]['user'] = $this->users->getUser($messages[$key]['user_id'])[0]['name'];
+                $messages[$key]['user_count_messages'] = count($this->getUserMessages($messages[$key]['user_id']));
+                unset($messages[$key]['user_id']);
+            }
+
+            $messages['pages'] = $pages;
         }
 
         return $messages;

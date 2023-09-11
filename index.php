@@ -13,9 +13,17 @@ $topic = null;
 $topics = [];
 $messages = [];
 
+if(isset($_GET['page'])) {
+    $page = $_GET['page'];
+} else {
+    $page = 1;
+}
+
 if (isset($_GET['topic'])) {
     $topic = $t->getTopic($_GET['topic']);
-    $messages = $m->getTopicMessages($_GET['topic']);
+    $messages = $m->getTopicMessages($_GET['topic'], $page);
+    $pages = $messages['pages'];
+    unset($messages['pages']);
     
     if(isset($_POST['username']) && isset($_POST['message'])) {
         $username = $_POST['username'];
@@ -42,7 +50,9 @@ if (isset($_GET['topic'])) {
         }
     }
 } else {
-    $topics = $t->getTopics();
+    $topics = $t->getTopics($page);
+    $pages = $topics['pages'];
+    unset($topics['pages']);
 }
 ?>
 
@@ -127,6 +137,15 @@ if (isset($_GET['topic'])) {
                     </div>
                 </div>
             <?php } ?>
+
+            <?php
+                if($pages > 1) {
+                    for($p = 1; $p <= $pages; $p++) {  
+                        echo '<a href = "?page=' . $p . '">' . $p . ' </a>';  
+                    }
+                }
+            ?>
+
             <div class="messageForm">
                 <h3>Ответить</h3>
                 <form method="POST">
@@ -184,6 +203,14 @@ if (isset($_GET['topic'])) {
                     </a>
                 <?php } ?>
             </ul>
+
+            <?php
+                if($pages > 1) {
+                    for($p = 1; $p <= $pages; $p++) {  
+                        echo '<a href = "?page=' . $p . '">' . $p . ' </a>';  
+                    }
+                }
+            ?>
 
         <?php } ?>
     </div>

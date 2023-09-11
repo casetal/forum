@@ -11,14 +11,24 @@ class Topics {
         $this->messages = new Messages();
     }
 
-    public function getTopics() {
-        $topics = $this->db->select('SELECT * from `topics` ORDER BY `id` DESC');
+    public function getTopics($page = 1, $results_per_page = 10) {
+        $query = 'SELECT * from `topics` ORDER BY `id` DESC';
+
+        $topics = $this->db->select($query);
+
+        $page_first_result = ($page-1) * $results_per_page;  
+        $number_of_result = count($topics);
+        $pages = ceil ($number_of_result / $results_per_page);
+
+        $topics = $this->db->select($query . ' LIMIT ' . $page_first_result . ',' . $results_per_page);
 
         foreach($topics as $key => &$topic) {
             $topics[$key]['user'] = $this->users->getUser($topics[$key]['user_id'])[0]['name'];
             $topics[$key]['count_messages'] = count($this->messages->getTopicMessages($topics[$key]['id']));
             unset($topics[$key]['user_id']);
         }
+
+        $topics['pages'] = $pages;
 
         return $topics;
     }
