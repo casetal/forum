@@ -24,6 +24,8 @@ class Topics {
     }
 
     public function getTopic($id) {
+        $id = $this->db->connection->real_escape_string($id);
+
         $topic = $this->db->select('SELECT * from `topics` WHERE `id`=' . $id)[0];
         $topic['user'] = $this->users->getUser($topic['user_id'])[0]['name'];
         $topic['user_count_messages'] = count($this->messages->getUserMessages($topic['user_id']));
@@ -32,6 +34,10 @@ class Topics {
     }
 
     public function createTopic($user_id, $name, $description) {
+        $user_id = $this->db->connection->real_escape_string($user_id);
+        $name = $this->db->connection->real_escape_string($name);
+        $description = $this->db->connection->real_escape_string($description);
+
         $topic = $this->db->Insert('INSERT INTO `topics` (`name`, `description`, `user_id`) VALUES ("' . $name . '", "' . $description . '", "' . $user_id . '")');
         return $topic;
     }

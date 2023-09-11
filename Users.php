@@ -16,12 +16,16 @@ class Users {
     }
 
     public function getUser($user_id) {
+        $user_id = $this->db->connection->real_escape_string($user_id);
+        
         $user = $this->db->select('SELECT * from `users` WHERE `id`=' . $user_id);
 
         return $user;
     }
 
     public function createUser($name) {
+        $name = $this->db->connection->real_escape_string($name);
+
         $searchUser = $this->db->select('SELECT * from `users` WHERE LOWER(`name`)="' . strtolower($name) . '"');
 
         if(count($searchUser) == 0) {

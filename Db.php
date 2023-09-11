@@ -6,7 +6,7 @@ class Dbconnect {
     private $pass;
     private $name;
 
-    private $connection;
+    public $connection;
 
     public function __construct() {
         try {
