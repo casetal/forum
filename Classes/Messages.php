@@ -8,7 +8,15 @@ class Messages {
         $this->db = new Dbconnect();
         $this->users = new Users();
     }
-
+    
+    /**
+     * Список сообщений топика с пагинацией
+     *
+     * @param  int $topic_id
+     * @param  int $page
+     * @param  int $results_per_page
+     * @return array
+     */
     public function getTopicMessages($topic_id, $page = 0, $results_per_page = 10) {
         $topic_id = $this->db->connection->real_escape_string($topic_id);
 
@@ -33,14 +41,28 @@ class Messages {
 
         return $messages;
     }
-
+    
+    /**
+     * Получение массива с ответами из пользователя
+     *
+     * @param  int $user_id
+     * @return array
+     */
     public function getUserMessages($user_id) {
         $user_id = $this->db->connection->real_escape_string($user_id);
 
         $messages = $this->db->select('SELECT * from `messages` WHERE `user_id`='.$user_id);
         return $messages;
     }
-
+    
+    /**
+     * Отправка (создание) сообщения в топик
+     *
+     * @param  int $topic_id
+     * @param  int $user_id
+     * @param  string $message
+     * @return int
+     */
     public function createMessage($topic_id, $user_id, $message) {
         $topic_id = $this->db->connection->real_escape_string($topic_id);
         $user_id = $this->db->connection->real_escape_string($user_id);

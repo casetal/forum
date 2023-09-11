@@ -10,7 +10,14 @@ class Topics {
         $this->users = new Users();
         $this->messages = new Messages();
     }
-
+    
+    /**
+     * Массив с топиками с пагинацией
+     *
+     * @param  int $page
+     * @param  int $results_per_page
+     * @return array
+     */
     public function getTopics($page = 1, $results_per_page = 10) {
         $query = 'SELECT * from `topics` ORDER BY `id` DESC';
 
@@ -32,7 +39,13 @@ class Topics {
 
         return $topics;
     }
-
+    
+    /**
+     * Получение топика
+     *
+     * @param  mixed $id
+     * @return array
+     */
     public function getTopic($id) {
         $id = $this->db->connection->real_escape_string($id);
 
@@ -42,7 +55,15 @@ class Topics {
 
         return $topic;
     }
-
+    
+    /**
+     * Создание топика
+     *
+     * @param  int $user_id
+     * @param  string $name
+     * @param  string $description
+     * @return int
+     */
     public function createTopic($user_id, $name, $description) {
         $user_id = $this->db->connection->real_escape_string($user_id);
         $name = $this->db->connection->real_escape_string($name);
