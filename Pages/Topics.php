@@ -20,8 +20,10 @@
 
 <?php
 if ($pages > 1) {
+    echo '<nav class="text-center"><ul class="pagination" role="navigation">';
     for ($p = 1; $p <= $pages; $p++) {
-        echo '<a href = "?page=' . $p . '">' . $p . ' </a>';
+        echo '<li ' . (($page == $p) ? 'class="active"' : '') . 'role="presentation"><a href = "?page=' . $p . '">' . $p . ' </a></li>';
     }
+    echo '</ul></nav>';
 }
 ?>
